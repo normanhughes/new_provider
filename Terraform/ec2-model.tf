@@ -17,4 +17,23 @@ resource "aws_instance" "dev" {
     tags = {
         Name = "dev${count.index}"
     }
+    vpc_security_group_ids = [ "sg-033516326de23ccca", "sg-f3762786" ]
+}
+# criar security group para acessa porta ssh (22) com nome ssh-acess
+resource "aws_security_group" "ssh-acess" {
+  name        = "ssh-acess"
+  description = "Allow SSH inbound traffic"
+
+  ingress {
+    description = "SSH from VPC"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    # IPs liberados para conectar pelo ssh
+    cidr_blocks = ["187.255.252.8/32"]
+  }
+
+  tags = {
+    Name = "ssh"
+  }
 }
